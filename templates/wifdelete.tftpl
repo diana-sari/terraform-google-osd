@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -x
+
+# Check for OCM installation
+ocm > /dev/null 2>&1 || (echo "Please ensure ocm is installed"; exit 1)
+
+# Delete WIF configuration
+if ocm list wif-config | grep -q "${wif_config_name}"; then
+    echo "Deleting WIF configuration '${wif_config_name}'..."
+    ocm delete wif-config "${wif_config_name}"
+else
+    echo "WIF configuration '${wif_config_name}' not found"
+fi

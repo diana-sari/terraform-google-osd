@@ -15,7 +15,7 @@ provider "google" {
   project = var.gcp_project
 }
 
-resource "shell_script" "cluster_install" {
+# resource "shell_script" "cluster_install" {
   count = var.only_deploy_infra_no_osd ? 0 : 1
 
   # As currently we do not have a osdongcp_redhatopenshift_cluster style resource, this handles
@@ -46,5 +46,33 @@ resource "shell_script" "cluster_install" {
 
   depends_on = [
     google_compute_router_nat.nat-master
+  ]
+}
+
+resource "shell_script" "cluster_install" {
+  count = var.only_deploy_infra_no_osd ? 0 : 1
+
+  lifecycle_commands {
+    create = templatefile(
+      "${path.module}/templates/clusterinstall.tftpl",
+      {
+        cluster_name         = var.clustername
+        vpc_name             = google_compute_network.vpc_network.name
+        control_plane_subnet = google_compute_subnetwork.vpc_subnetwork_masters.name
+        compute_subnet       = google_compute_subnetwork.vpc_subnetwork_workers.name
+        gcp_region           = var.gcp_region
+        wif_config_name      = var.wif_config_name
+        private_flag         = var.osd_gcp_private ? "--private" : ""
+    })
+    delete = templatefile(
+      "${path.module}/templates/clusterdestroy.tftpl",
+      {
+        cluster_name = var.clustername
+    })
+  }
+
+  depends_on = [
+    google_compute_router_nat.nat-master,
+    shell_script.wif_config
   ]
 }

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -x
+
+# Check for OCM installation
+ocm > /dev/null 2>&1 || (echo "Please ensure ocm is installed"; exit 1)
+
+# Check OCM version (needs to be 1.0.2 or greater for WIF)
+OCM_VERSION=$(ocm version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+if [[ $(echo "$OCM_VERSION 1.0.2" | awk '{print ($1 >= $2)}') -ne 1 ]]; then
+    echo "OCM version must be 1.0.2 or greater for WIF support. Current version: $OCM_VERSION"
+    exit 1
+fi
+
+# Check if WIF config already exists
+if ocm list wif-config | grep -q "${wif_config_name}"; then
+    echo "WIF config '${wif_config_name}' already exists"
+else
+    echo "Creating WIF configuration..."
+    ocm gcp create wif-config --name "${wif_config_name}" \
+        --project "${gcp_project}" \
+        --mode "${wif_mode}"
+    
+    # If manual mode, wait for user to execute the script
+    if [[ "${wif_mode}" == "manual" ]]; then
+        echo "Manual mode selected. Please execute the generated script.sh file to create the required resources."
+        echo "Location: ~/.config/ocm/wif/${wif_config_name}/script.sh"
+        echo "After execution, press Enter to continue..."
+        read -r
+    fi
+fi
+
+echo "WIF configuration '${wif_config_name}' is ready"

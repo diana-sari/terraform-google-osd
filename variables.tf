@@ -81,10 +81,21 @@ variable "bastion_key_loc" {
   description = "Public key for bastion host"
 }
 
-variable "gcp_sa_file_loc" {
+# variable "gcp_sa_file_loc" {
+#  type        = string
+#  default     = "~/.ssh/id_rsa_sa.json"
+#  description = "Path to private json for OSD on GCP Admin Service Account"
+# }
+
+variable "wif_config_name" {
   type        = string
-  default     = "~/.ssh/id_rsa_sa.json"
-  description = "Path to private json for OSD on GCP Admin Service Account"
+  description = "Name of the Workload Identity Federation configuration"
+}
+
+variable "wif_mode" {
+  type        = string
+  default     = "auto"
+  description = "WIF creation mode: 'auto' or 'manual'"
 }
 
 variable "only_deploy_infra_no_osd" {

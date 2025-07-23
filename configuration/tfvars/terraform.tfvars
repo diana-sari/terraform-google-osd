@@ -27,3 +27,7 @@ osd_gcp_private = false
 bastion_machine_type = "e2-small"
 
 only_deploy_infra_no_osd = true
+
+wif_config_name = "emea-osd-gcp-wif"
+
+wif_mode = "auto"  # or "manual" if you want more control
