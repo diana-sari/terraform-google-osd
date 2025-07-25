@@ -44,8 +44,6 @@ resource "shell_script" "cluster_install" {
         compute_subnet       = google_compute_subnetwork.vpc_subnetwork_workers.name
         gcp_region           = var.gcp_region
         gcp_sa_file_loc      = var.gcp_sa_file_loc
-        wif_config_name      = "${var.clustername}-wif"
-        osd_gcp_private      = var.osd_gcp_private
     })
   }
 
