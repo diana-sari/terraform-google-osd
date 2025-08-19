@@ -102,3 +102,9 @@ variable "gcp_authentication_type" {
     error_message = "Valid values for gcp_authentication_type are either 'service_account' or workload_identity_federation'."
   }
 }
+
+variable "compute_machine_type" {
+  type        = string
+  description = "GCP machine type for compute nodes"
+  default     = "n2-standard-4"  
+}

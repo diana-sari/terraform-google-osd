@@ -38,4 +38,5 @@ ocm create cluster ${cluster_name} --provider gcp \
                 --compute-subnet ${compute_subnet} \
                 "$authentication_param_name" "$authentication_param_value" \
                 $private_flag \
+                --compute-machine-type ${compute_machine_type} \
                 --ccs

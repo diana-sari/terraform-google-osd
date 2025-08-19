@@ -1,0 +1,18 @@
+gcp_project = "mobb-demo"
+clustername = "ds-osdmachtype"
+vpc_routing_mode = "REGIONAL"
+master_cidr_block = "10.0.0.0/19"      
+worker_cidr_block = "10.0.32.0/19"     
+# Remove bastion_cidr_block since bastion not needed for public cluster
+gcp_region = "us-west1"
+gcp_zone = "us-west1-a"
+
+# Key settings for public cluster
+osd_gcp_private = false                # Make cluster public
+enable_osd_gcp_bastion = false         # No bastion needed for public
+
+# Authentication
+gcp_authentication_type = "workload_identity_federation"
+
+# Don't deploy just infra - deploy the actual cluster
+only_deploy_infra_no_osd = false
